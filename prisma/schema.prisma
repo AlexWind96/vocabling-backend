@@ -13,7 +13,7 @@ enum Role {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -23,6 +23,134 @@ model User {
   name        String
   role        Role          @default(USER)
 
+  learnGoal Int @default(50)
+
+
+
+  learnSessions LearnSession[]
+  currentSession CurrentLearnSession?
+  cards Card[]
+  modules Module[]
+
+  folders Folder[]
+
   @@map("users")
 }
+
+
+model CurrentLearnSession {
+    id String @id @default(uuid())
+    createdAt  DateTime @default(now())
+    userId String @unique
+    user   User @relation(fields: [userId], references: [id])
+    countOfCompleted  Int @default(0)
+    modules String[]
+}
+
+
+model LearnSession {
+    id String @id @default(uuid())
+    createdAt  DateTime @default(now())
+    userId String
+    user   User @relation(fields: [userId], references: [id])
+    completed Boolean
+
+    @@map("learnSessions")
+}
+
+
+
+model Card {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+
+  notes      String?
+  phraseTranslation   String
+  sentence  SentenceUnit[]
+  sentenceTranslation String?
+
+  userId String
+  user   User @relation(fields: [userId], references: [id])
+
+  moduleId String
+  module   Module @relation(fields: [moduleId], references: [id])
+
+  progress CardLearnProgress?
+
+  @@map("cards")
+}
+
+model SentenceUnit {
+    id  String    @id @default(uuid())
+    isPunctuation Boolean
+    isStudyPhrase Boolean
+    value String
+    translation String?
+    note String?
+
+    cardId String
+    card   Card @relation(fields: [cardId], references: [id])
+
+    @@map("sentenceUnits")
+}
+
+enum LEARN_STATUS {
+    NEW
+    SHOWN
+    IN_PROGRESS
+    FAMILIAR
+    KNOWN
+}
+
+model CardLearnProgress {
+    id String @id @default(uuid())
+    card Card @relation(fields: [cardId], references: [id])
+    cardId String @unique
+    interval Int @default(0)
+    countOfAnswers Int @default(0)
+    countOfRightAnswers Int @default(0)
+    accuracy Int @default(100)
+    status LEARN_STATUS @default(NEW)
+    lastRepetitionDate DateTime?
+    nextRepetitionDate DateTime?
+}
+
+
+model Module {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  label      String
+
+  folderId  String?
+  folder Folder? @relation(fields: [folderId], references: [id])
+
+  userId String
+  user   User @relation(fields: [userId], references: [id])
+
+  cards Card[]
+
+  @@map("modules")
+}
+
+
+model Folder {
+  id  String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  name      String
+
+  userId String
+  user   User @relation(fields: [userId], references: [id])
+
+  modules Module[]
+
+  @@map("folders")
+}
+
+
+
 
