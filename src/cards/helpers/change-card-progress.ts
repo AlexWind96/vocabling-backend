@@ -10,37 +10,45 @@ const getAccuracy = (cardProgress: CardLearnProgressEntity, answer: boolean) => 
     }
 }
 
+const getNextDay = (days: number) => {
+    return moment().utc().add(days, 'day').startOf('day').toDate()
+}
+
+const getNextTime = (min: number) => {
+    return moment().utc().add(min, 'm').toDate()
+}
+
 const getNextIntervalDate = (interval: number) => {
     switch (interval) {
         case 0: {
-            return moment().utc().add(2, 'm').toDate()
+            return getNextTime(2)
         }
         case 1: {
-            return moment().utc().add(1, 'day').startOf('day').toDate()
+            return getNextTime(5)
         }
         case 2: {
-            return moment().utc().add(2, 'day').startOf('day').toDate()
+            return getNextDay(1)
         }
         case 3: {
-            return moment().utc().add(3, 'day').startOf('day').toDate()
+            return getNextDay(2)
         }
         case 4: {
-            return moment().utc().add(6, 'day').startOf('day').toDate()
+            return getNextDay(3)
         }
         case 5: {
-            return moment().utc().add(11, 'day').startOf('day').toDate()
+            return getNextDay(6)
         }
         case 6: {
-            return moment().utc().add(21, 'day').startOf('day').toDate()
+            return getNextDay(11)
         }
         case 7: {
-            return moment().utc().add(40, 'day').startOf('day').toDate()
+            return getNextDay(21)
         }
         case 8: {
-            return moment().utc().add(80, 'day').startOf('day').toDate()
+            return getNextDay(40)
         }
         default: {
-            return moment().utc().add(40, 'day').startOf('day').toDate()
+            return getNextDay(40)
         }
     }
 }
