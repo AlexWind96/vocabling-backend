@@ -4,7 +4,7 @@ export interface Tokens {
 }
 
 export interface JwtPayload {
-  sub: number
+  sub: string
   email: string
   fp: string
 }

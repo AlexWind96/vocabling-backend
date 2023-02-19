@@ -2,7 +2,6 @@ import { ForbiddenException, Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
 import { LoginDto, RegisterDto } from './dto'
 import * as argon from 'argon2'
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime'
 import { JwtService } from '@nestjs/jwt'
 import { ConfigService } from '@nestjs/config'
 import { Tokens } from './types'
@@ -33,12 +32,10 @@ export class AuthService {
 
       return tokens
     } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === 'P2002') {
-          throw new ForbiddenException(
+      if (error.code === 'P2002') {
+        throw new ForbiddenException(
             'User with such credentials is already exists',
-          )
-        }
+        )
       }
       throw error
     }
@@ -69,7 +66,7 @@ export class AuthService {
     return tokens
   }
 
-  async logout(userId: number) {
+  async logout(userId: string) {
     await this.prismaService.user.updateMany({
       where: {
         id: userId,
@@ -84,7 +81,7 @@ export class AuthService {
     return
   }
   async refreshTokens(
-    userId: number,
+    userId: string,
     rt: string,
     fingerprint: string,
   ): Promise<Tokens> {
@@ -107,7 +104,7 @@ export class AuthService {
   }
 
   private async getTokens(
-    userId: number,
+    userId: string,
     email: string,
     fingerprint: string,
   ): Promise<Tokens> {
@@ -118,7 +115,7 @@ export class AuthService {
     }
     const [at, rt] = await Promise.all([
       this.jwt.signAsync(data, {
-        expiresIn: 15 * 60,
+        expiresIn: 30 * 60,
         secret: this.configService.get('JWT_AT_SECRET'),
       }),
       this.jwt.signAsync(data, {
@@ -132,7 +129,7 @@ export class AuthService {
     }
   }
 
-  private async updateRtHash(userId: number, rt: string) {
+  private async updateRtHash(userId: string, rt: string) {
     const hash = await AuthService.getHash(rt)
     await this.prismaService.user.update({
       where: {

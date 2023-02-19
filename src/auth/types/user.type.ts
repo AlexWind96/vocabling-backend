@@ -1,5 +1,5 @@
 export interface UserAuthData {
-  id: number
+  id: string
   email: string
   fp: string
   refreshToken?: string
