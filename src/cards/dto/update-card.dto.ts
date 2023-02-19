@@ -13,10 +13,6 @@ import {
 import {Type} from "class-transformer";
 
 export class SentenceUnit {
-    @IsString()
-    @IsNotEmpty()
-    id: string
-
     @IsBoolean()
     @IsNotEmpty()
     isPunctuation: boolean

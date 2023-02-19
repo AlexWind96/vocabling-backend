@@ -98,8 +98,10 @@ export class CardsService {
                 sentenceTranslation: updateCardDto.sentenceTranslation,
                 notes: updateCardDto.notes,
                 moduleId: updateCardDto.moduleId,
-                sentence: updateCardDto.sentence && {
-                    deleteMany: {id: {in: updateCardDto.sentence.map(({id}) => id)}},
+                sentence: {
+                    deleteMany: {
+                        cardId: id
+                    },
                     createMany: {data: updateCardDto.sentence}
                 }
             },
