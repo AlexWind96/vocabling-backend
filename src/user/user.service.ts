@@ -1,14 +1,13 @@
-import { ForbiddenException, Injectable } from '@nestjs/common'
-import { PrismaService } from '../prisma/prisma.service'
-import { EditUserDto } from './dto/edit-user.dto'
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime'
+import {ForbiddenException, Injectable} from '@nestjs/common'
+import {PrismaService} from '../prisma/prisma.service'
+import {EditUserDto} from './dto/edit-user.dto'
+import {PrismaClientKnownRequestError} from '@prisma/client/runtime'
 
 @Injectable()
 export class UserService {
   constructor(private prismaService: PrismaService) {}
 
-  async editUser(userId: number, dto: EditUserDto) {
-    console.log(dto)
+  async editUser(userId: string, dto: EditUserDto) {
     try {
       const user = await this.prismaService.user.update({
         where: {
@@ -30,7 +29,7 @@ export class UserService {
     }
   }
 
-  async getUser(userId: number) {
+  async getUser(userId: string) {
     try {
       const user = await this.prismaService.user.findUnique({
         where: {
