@@ -44,16 +44,19 @@ model CurrentLearnSession {
     userId String @unique
     user   User @relation(fields: [userId], references: [id])
     countOfCompleted  Int @default(0)
+    rightAnswers Int @default(0)
     modules String[]
 }
 
 
 model LearnSession {
-    id String @id @default(uuid())
+    id String @id
     createdAt  DateTime @default(now())
     userId String
     user   User @relation(fields: [userId], references: [id])
-    completed Boolean
+    isCompleted Boolean
+    countOfCompleted Int
+    rightAnswers Int
 
     @@map("learnSessions")
 }
