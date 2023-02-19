@@ -7,6 +7,7 @@ import {findManyCursorConnection} from "@devoxa/prisma-relay-cursor-connection";
 import {Page} from "../page/page.dto";
 import {ModuleEntity} from './entities/module.entity';
 import {CreateModuleDto} from './dto/create-module.dto';
+import {getCountsByProgress} from "./helpers";
 
 
 @Injectable()
@@ -64,13 +65,19 @@ export class ModulesService {
                     select: {
                         cards: true
                     }
+                },
+                cards: {
+                    select: {
+                        progress: true
+                    }
                 }
             }
         })
+        const countsByProgress = getCountsByProgress(module.cards)
         if (!module) {
             throw new NotFoundException(`${this.entityName} is not found`)
         }
-        return module;
+        return {...module, counts: countsByProgress, cards: undefined};
     }
 
     async update(id: string, userId: string, updateModuleDto: UpdateModuleDto): Promise<ModuleEntity> {
