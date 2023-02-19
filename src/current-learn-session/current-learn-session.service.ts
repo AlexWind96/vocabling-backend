@@ -110,7 +110,7 @@ export class CurrentLearnSessionService {
         user: true
       }
     })
-    if (session.user.learnGoal >= session.countOfCompleted) {
+    if (session.user.learnGoal <= session.countOfCompleted) {
       await this.completeCurrentLearnSession(userId)
     }
   }
