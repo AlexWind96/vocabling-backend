@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { Type } from 'class-transformer'
-import { IsNumber, IsOptional } from 'class-validator'
+import {IsNumber, IsOptional, IsString} from 'class-validator'
 
 export class ConnectionArgs {
   @IsOptional()
@@ -16,14 +16,14 @@ export class ConnectionArgs {
   last?: number
 
   @IsOptional()
-  @IsNumber()
-  @Type(() => Number)
+  @IsString()
+  @Type(() => String)
   @ApiProperty({ required: false })
-  after?
+  after?: string
 
   @IsOptional()
-  @IsNumber()
-  @Type(() => Number)
+  @IsString()
+  @Type(() => String)
   @ApiProperty({ required: false })
-  before?
+  before?: string
 }
