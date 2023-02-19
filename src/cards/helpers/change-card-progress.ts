@@ -16,28 +16,28 @@ const getNextIntervalDate = (interval: number) => {
             return moment().utc().add(2, 'm').toDate()
         }
         case 1: {
-            return moment().utc().add(5, 'm').toDate()
-        }
-        case 2: {
             return moment().utc().add(1, 'day').startOf('day').toDate()
         }
-        case 3: {
+        case 2: {
             return moment().utc().add(2, 'day').startOf('day').toDate()
         }
-        case 4: {
+        case 3: {
             return moment().utc().add(3, 'day').startOf('day').toDate()
         }
-        case 5: {
+        case 4: {
             return moment().utc().add(6, 'day').startOf('day').toDate()
         }
-        case 6: {
+        case 5: {
             return moment().utc().add(11, 'day').startOf('day').toDate()
         }
-        case 7: {
+        case 6: {
             return moment().utc().add(21, 'day').startOf('day').toDate()
         }
-        case 8: {
+        case 7: {
             return moment().utc().add(40, 'day').startOf('day').toDate()
+        }
+        case 8: {
+            return moment().utc().add(80, 'day').startOf('day').toDate()
         }
         default: {
             return moment().utc().add(40, 'day').startOf('day').toDate()
