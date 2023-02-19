@@ -5,7 +5,10 @@ export class LearnSessionEntity implements LearnSession {
 
     @ApiProperty() id: string
     @ApiProperty() createdAt: Date
-    @ApiProperty() completed: boolean
+    @ApiProperty() isCompleted: boolean
+    @ApiProperty() countOfCompleted: number
+    @ApiProperty() rightAnswers: number
+
     @ApiProperty() userId: string
     @ApiProperty() user: {
         learnGoal: number
