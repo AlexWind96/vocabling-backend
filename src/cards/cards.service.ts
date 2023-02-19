@@ -98,7 +98,7 @@ export class CardsService {
                 sentenceTranslation: updateCardDto.sentenceTranslation,
                 notes: updateCardDto.notes,
                 moduleId: updateCardDto.moduleId,
-                sentence: {
+                sentence: updateCardDto.sentence && {
                     deleteMany: {
                         cardId: id
                     },
@@ -119,21 +119,17 @@ export class CardsService {
         if (card.userId !== userId) {
             throw new ForbiddenException()
         }
-        const [,, deletedCard] = await this.prisma.$transaction([
-            this.prisma.sentenceUnit.deleteMany({where: {
-                cardId: card.id
-                }}),
-            this.prisma.cardLearnProgress.delete({where: {
-                    cardId: card.id
-                }}),
-            this.prisma.card.delete({where: {
-                    id,
-                }, include:{
+
+        return await this.prisma.card.delete({
+            where: {
+                id
+            },
+            include: {
                 sentence: true
-                }})
-        ])
-        return deletedCard
+            }
+        })
     }
+
 
     async registerRightAnswer(id: string, userId: string) {
         const progress = await this.prisma.cardLearnProgress.findUnique({

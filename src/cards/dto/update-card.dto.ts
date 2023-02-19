@@ -42,4 +42,8 @@ export class UpdateCardDto extends PartialType(CreateCardDto) {
     @ArrayMaxSize(50)
     @Type(() => SentenceUnit)
     sentence: SentenceUnit[]
+
+    @IsString()
+    @IsOptional()
+    phraseTranslation: string
 }

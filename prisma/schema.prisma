@@ -78,7 +78,7 @@ model Card {
   user   User @relation(fields: [userId], references: [id])
 
   moduleId String
-  module   Module @relation(fields: [moduleId], references: [id])
+  module   Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
 
   progress CardLearnProgress?
 
@@ -94,7 +94,7 @@ model SentenceUnit {
     note String?
 
     cardId String
-    card   Card @relation(fields: [cardId], references: [id])
+    card   Card @relation(fields: [cardId], references: [id], onDelete: Cascade)
 
     @@map("sentenceUnits")
 }
@@ -109,7 +109,7 @@ enum LEARN_STATUS {
 
 model CardLearnProgress {
     id String @id @default(uuid())
-    card Card @relation(fields: [cardId], references: [id])
+    card Card @relation(fields: [cardId], references: [id], onDelete: Cascade)
     cardId String @unique
     interval Int @default(0)
     countOfAnswers Int @default(0)

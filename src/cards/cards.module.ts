@@ -6,6 +6,6 @@ import {CurrentLearnSessionModule} from "../current-learn-session/current-learn-
 @Module({
   controllers: [CardsController],
   providers: [CardsService],
-  imports: [CurrentLearnSessionModule]
+  imports: [CurrentLearnSessionModule],
 })
 export class CardsModule {}

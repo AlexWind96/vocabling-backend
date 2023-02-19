@@ -98,7 +98,7 @@ export class ModulesService {
         })
     }
 
-    async remove(id: string, userId: string): Promise<ModuleEntity> {
+    async remove(id: string, userId: string): Promise<Omit<ModuleEntity, '_count'>> {
         const module = await this.findOne(id, userId)
         if (!module) {
             throw new NotFoundException(`${this.entityName} is not found`)
@@ -106,16 +106,10 @@ export class ModulesService {
         if (module.userId !== userId) {
             throw new ForbiddenException()
         }
+
         return await this.prisma.module.delete({
             where: {
-                id,
-            },
-            include: {
-                _count: {
-                    select: {
-                        cards: true
-                    }
-                }
+                id
             }
         })
     }
