@@ -8,6 +8,7 @@ export class CardLearnProgressEntity implements CardLearnProgress {
     @ApiProperty() interval: number
     @ApiProperty() accuracy: number
     @ApiProperty() countOfAnswers: number
+    @ApiProperty() step: number
     @ApiProperty() countOfRightAnswers: number
     @ApiProperty() status: LEARN_STATUS
     @ApiProperty() lastRepetitionDate: Date | null

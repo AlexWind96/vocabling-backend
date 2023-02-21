@@ -59,6 +59,12 @@ const isFamiliar = (cardProgress: CardLearnProgressEntity): boolean => {
     return (nextAccuracy >= 80 && nextInterval >= 4) || (nextInterval >= 6)
 }
 
+const isInProgress = (cardProgress: CardLearnProgressEntity): boolean => {
+    const nextInterval = cardProgress.interval + 1
+    const nextAccuracy = getAccuracy(cardProgress, true)
+    return (nextAccuracy >= 60 && nextInterval >= 2) || (nextInterval >= 3)
+}
+
 
 
 
@@ -68,6 +74,7 @@ export const changeCardProgressPositive = (cardProgress: CardLearnProgressEntity
             return {
                 status: LEARN_STATUS.SHOWN,
                 interval: 0,
+                step: 2,
                 accuracy: 100,
                 countOfRightAnswers: 1,
                 countOfAnswers: 1,
@@ -77,8 +84,9 @@ export const changeCardProgressPositive = (cardProgress: CardLearnProgressEntity
         }
         case LEARN_STATUS.SHOWN: {
             return {
-                status: LEARN_STATUS.IN_PROGRESS,
+                status: isInProgress(cardProgress) ? LEARN_STATUS.IN_PROGRESS : LEARN_STATUS.SHOWN,
                 interval: cardProgress.interval + 1,
+                step: isInProgress(cardProgress)? 3 : 2,
                 accuracy: getAccuracy(cardProgress, true),
                 countOfRightAnswers: cardProgress.countOfRightAnswers + 1,
                 countOfAnswers: cardProgress.countOfAnswers + 1,
@@ -90,6 +98,7 @@ export const changeCardProgressPositive = (cardProgress: CardLearnProgressEntity
             return {
                 status: isFamiliar(cardProgress) ? LEARN_STATUS.FAMILIAR : LEARN_STATUS.IN_PROGRESS,
                 interval: cardProgress.interval + 1,
+                step: isFamiliar(cardProgress) ? 4 : 3,
                 accuracy: getAccuracy(cardProgress, true),
                 countOfRightAnswers: cardProgress.countOfRightAnswers + 1,
                 countOfAnswers: cardProgress.countOfAnswers + 1,
@@ -101,6 +110,7 @@ export const changeCardProgressPositive = (cardProgress: CardLearnProgressEntity
             return {
                 status: LEARN_STATUS.KNOWN,
                 interval: cardProgress.interval + 1,
+                step: 5,
                 accuracy: getAccuracy(cardProgress, true),
                 countOfRightAnswers: cardProgress.countOfRightAnswers + 1,
                 countOfAnswers: cardProgress.countOfAnswers + 1,
@@ -112,13 +122,14 @@ export const changeCardProgressPositive = (cardProgress: CardLearnProgressEntity
 }
 
 
-export const changeCardProgressNegative = (cardProgress: CardLearnProgressEntity) => {
+export const changeCardProgressNegative = (cardProgress: CardLearnProgressEntity): Partial<CardLearnProgressEntity> => {
     switch (cardProgress.status) {
         case LEARN_STATUS.NEW: {
             //Регистрируем как правильный ответ
             return {
                 status: LEARN_STATUS.SHOWN,
                 interval: 0,
+                step: 2,
                 accuracy: 100,
                 countOfRightAnswers: 1,
                 countOfAnswers: 1,
@@ -130,6 +141,7 @@ export const changeCardProgressNegative = (cardProgress: CardLearnProgressEntity
             return {
                 status: LEARN_STATUS.SHOWN,
                 interval: 0,
+                step: 2,
                 accuracy: getAccuracy(cardProgress, false),
                 countOfRightAnswers: cardProgress.countOfRightAnswers,
                 countOfAnswers: cardProgress.countOfAnswers + 1,
@@ -139,8 +151,9 @@ export const changeCardProgressNegative = (cardProgress: CardLearnProgressEntity
         }
         case LEARN_STATUS.IN_PROGRESS: {
             return {
-                status: LEARN_STATUS.IN_PROGRESS,
-                interval: 0,
+                status: cardProgress.interval === 1 ? LEARN_STATUS.SHOWN : LEARN_STATUS.IN_PROGRESS,
+                interval: 1,
+                step: cardProgress.interval === 1 ? 2 : 3,
                 accuracy: getAccuracy(cardProgress, false),
                 countOfRightAnswers: cardProgress.countOfRightAnswers,
                 countOfAnswers: cardProgress.countOfAnswers + 1,
@@ -151,7 +164,8 @@ export const changeCardProgressNegative = (cardProgress: CardLearnProgressEntity
         case LEARN_STATUS.FAMILIAR: {
             return {
                 status: LEARN_STATUS.IN_PROGRESS,
-                interval: 0,
+                interval: 1,
+                step: 3,
                 accuracy: getAccuracy(cardProgress, false),
                 countOfRightAnswers: cardProgress.countOfRightAnswers,
                 countOfAnswers: cardProgress.countOfAnswers + 1,

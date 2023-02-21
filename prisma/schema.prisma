@@ -25,8 +25,6 @@ model User {
 
   learnGoal Int @default(50)
 
-
-
   learnSessions LearnSession[]
   currentSession CurrentLearnSession?
   cards Card[]
@@ -67,7 +65,6 @@ model Card {
   id        String    @id @default(uuid())
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-
 
   notes      String?
   phraseTranslation   String
@@ -115,6 +112,7 @@ model CardLearnProgress {
     countOfAnswers Int @default(0)
     countOfRightAnswers Int @default(0)
     accuracy Int @default(100)
+    step Int @default(1)
     status LEARN_STATUS @default(NEW)
     lastRepetitionDate DateTime?
     nextRepetitionDate DateTime?
