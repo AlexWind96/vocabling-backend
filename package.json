@@ -6,9 +6,9 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "temp": "rimraf dist && npx prisma migrate deploy && npx prisma generate",
+    "prebuild": "rimraf dist && npx prisma migrate deploy && npx prisma generate",
     "build": "nest build",
-    "start": "node dist/main",
+    "start:prod": "node dist/main",
     "prestart:dev": "npm run db:test:restart",
     "start:dev": "dotenv -e .env.dev -- nest start --watch",
     "db:test:restart": "npm run db:test:rm && npm run db:test:up && sleep 1 && npm run prisma:test:deploy",
