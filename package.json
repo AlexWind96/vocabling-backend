@@ -6,7 +6,7 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "prebuild": "rimraf dist && npx prisma migrate deploy && npx prisma generate",
+    "temp": "rimraf dist && npx prisma migrate deploy && npx prisma generate",
     "build": "nest build",
     "start": "node dist/main",
     "prestart:dev": "npm run db:test:restart",
